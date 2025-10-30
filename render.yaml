@@ -3,14 +3,16 @@ services:
   - type: web
     name: ghostshell-license-server
     env: python
+    region: oregon
     plan: free
     buildCommand: >-
-      pip install --upgrade pip setuptools wheel &&
-      pip install -r backend/requirements.txt
+      pip install --upgrade pip setuptools wheel --no-cache-dir &&
+      pip install --no-cache-dir -r backend/requirements.txt --only-binary=:all: ||
+      pip install --no-cache-dir -r backend/requirements.txt --prefer-binary
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
-        value: 3.12
+        value: 3.12.3
       - key: DATABASE_URL
         fromDatabase:
           name: license_server_db
@@ -24,20 +26,25 @@ services:
       - key: PORT
         value: 10000
 
-  # Frontend: Streamlit App
+  # Frontend: Streamlit Admin Panel
   - type: web
     name: license-server-admin
     env: python
+    region: oregon
     plan: free
     buildCommand: >-
-      pip install --upgrade pip setuptools wheel &&
-      pip install -r frontend/requirements-frontend.txt
+      pip install --upgrade pip setuptools wheel --no-cache-dir &&
+      pip install --no-cache-dir -r frontend/requirements-frontend.txt --only-binary=:all: ||
+      pip install --no-cache-dir -r frontend/requirements-frontend.txt --prefer-binary
     startCommand: streamlit run frontend/app.py --server.port $PORT --server.address 0.0.0.0
     envVars:
       - key: PYTHON_VERSION
-        value: 3.12
+        value: 3.12.3
+      - key: BACKEND_URL
+        value: https://ghostshell-license-server.onrender.com
 
 databases:
   - name: license_server_db
     databaseName: license_server_db
     user: license_server_db_user
+    plan: free
