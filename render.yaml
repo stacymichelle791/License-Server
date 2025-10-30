@@ -6,9 +6,9 @@ services:
     region: oregon
     plan: free
     buildCommand: >-
-      pip install --upgrade pip setuptools wheel --no-cache-dir &&
-      pip install --no-cache-dir -r backend/requirements.txt --only-binary=:all: ||
-      pip install --no-cache-dir -r backend/requirements.txt --prefer-binary
+      python3.12 -m pip install --upgrade pip setuptools wheel --no-cache-dir &&
+      python3.12 -m pip install --no-cache-dir -r backend/requirements.txt --only-binary=:all: --no-deps ||
+      python3.12 -m pip install --no-cache-dir -r backend/requirements.txt --only-binary=:all:
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
@@ -33,9 +33,9 @@ services:
     region: oregon
     plan: free
     buildCommand: >-
-      pip install --upgrade pip setuptools wheel --no-cache-dir &&
-      pip install --no-cache-dir -r frontend/requirements-frontend.txt --only-binary=:all: ||
-      pip install --no-cache-dir -r frontend/requirements-frontend.txt --prefer-binary
+      python3.12 -m pip install --upgrade pip setuptools wheel --no-cache-dir &&
+      python3.12 -m pip install --no-cache-dir -r frontend/requirements-frontend.txt --only-binary=:all: --no-deps ||
+      python3.12 -m pip install --no-cache-dir -r frontend/requirements-frontend.txt --only-binary=:all:
     startCommand: streamlit run frontend/app.py --server.port $PORT --server.address 0.0.0.0
     envVars:
       - key: PYTHON_VERSION
