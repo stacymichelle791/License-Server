@@ -1,18 +1,17 @@
 services:
-  # ────────────────────── Backend: FastAPI License Server ──────────────────────
+  # Backend: FastAPI License Server
   - type: web
     name: ghostshell-license-server
     env: python
     region: oregon
     plan: free
+    runtime: python-3.12.3
     buildCommand: >-
       python3.12 -m venv .venv &&
       .venv/bin/pip install --upgrade pip setuptools wheel --no-cache-dir &&
       .venv/bin/pip install --no-cache-dir --only-binary=:all: -r backend/requirements.txt
     startCommand: .venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.12.3
       - key: DATABASE_URL
         fromDatabase:
           name: license_server_db
@@ -26,20 +25,19 @@ services:
       - key: PORT
         value: 10000
 
-  # ────────────────────── Frontend: Streamlit Admin Panel ──────────────────────
+  # Frontend: Streamlit Admin Panel
   - type: web
     name: license-server-admin
     env: python
     region: oregon
     plan: free
+    runtime: python-3.12.3
     buildCommand: >-
       python3.12 -m venv .venv &&
       .venv/bin/pip install --upgrade pip setuptools wheel --no-cache-dir &&
       .venv/bin/pip install --no-cache-dir --only-binary=:all: -r frontend/requirements-frontend.txt
     startCommand: .venv/bin/streamlit run frontend/app.py --server.port $PORT --server.address 0.0.0.0
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.12.3
       - key: BACKEND_URL
         value: https://ghostshell-license-server.onrender.com
 
