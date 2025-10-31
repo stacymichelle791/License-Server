@@ -4,10 +4,8 @@ services:
   # ============================
   - type: web
     name: ghostshell-license-server
-    env: python
     region: oregon
     plan: free
-    runtime: python-3.12.3
     buildCommand: >-
       python3.12 -m venv .venv &&
       .venv/bin/pip install --upgrade pip setuptools wheel --no-cache-dir &&
@@ -32,10 +30,8 @@ services:
   # ============================
   - type: web
     name: license-server-admin
-    env: python
     region: oregon
     plan: free
-    runtime: python-3.12.3
     buildCommand: >-
       python3.12 -m venv .venv &&
       .venv/bin/pip install --upgrade pip setuptools wheel --no-cache-dir &&
