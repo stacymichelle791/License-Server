@@ -1,5 +1,7 @@
 services:
+  # ============================
   # Backend: FastAPI License Server
+  # ============================
   - type: web
     name: ghostshell-license-server
     env: python
@@ -9,7 +11,7 @@ services:
     buildCommand: >-
       python3.12 -m venv .venv &&
       .venv/bin/pip install --upgrade pip setuptools wheel --no-cache-dir &&
-      .venv/bin/pip install --no-cache-dir --only-binary=:all: -r backend/requirements.txt
+      .venv/bin/pip install --no-cache-dir -r backend/requirements.txt
     startCommand: .venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
@@ -25,7 +27,9 @@ services:
       - key: PORT
         value: 10000
 
+  # ============================
   # Frontend: Streamlit Admin Panel
+  # ============================
   - type: web
     name: license-server-admin
     env: python
@@ -35,7 +39,7 @@ services:
     buildCommand: >-
       python3.12 -m venv .venv &&
       .venv/bin/pip install --upgrade pip setuptools wheel --no-cache-dir &&
-      .venv/bin/pip install --no-cache-dir --only-binary=:all: -r frontend/requirements-frontend.txt
+      .venv/bin/pip install --no-cache-dir -r frontend/requirements-frontend.txt
     startCommand: .venv/bin/streamlit run frontend/app.py --server.port $PORT --server.address 0.0.0.0
     envVars:
       - key: BACKEND_URL
